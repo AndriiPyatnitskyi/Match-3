@@ -28,13 +28,12 @@ window.onload = function () {
     };
 
     // All of the different tile colors in RGB
-    var tileColors = [[255, 128, 128],
-        [128, 255, 128],
-        [128, 128, 255],
-        [255, 255, 128],
-        [255, 128, 255],
-        [128, 255, 255],
-        [255, 255, 255]];
+    var tileColors = [
+        [29, 73, 249],
+        [249, 29, 29],
+        [249, 242, 29],
+        [36, 249, 29]
+    ];
 
     // Clusters and moves that were found
     var clusters = [];  // { column, row, length, horizontal }

@@ -465,7 +465,10 @@ window.onload = function () {
     // Draw a tile with a color
     function drawTile(x, y, r, g, b) {
         context.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
-        context.fillRect(x + 2, y + 2, level.tileWidth - 4, level.tileHeight - 4);
+        context.beginPath();
+        context.arc(x + 20, y + 20, 14, 0, 2 * Math.PI, false);
+        context.fill();
+        context.lineWidth = 5;
     }
 
     // Render clusters

@@ -19,8 +19,8 @@ window.onload = function () {
     var level = {
         x: 250,         // X position
         y: 113,         // Y position
-        columns: 8,     // Number of tile columns
-        rows: 8,        // Number of tile rows
+        columns: 0,     // Number of tile columns
+        rows: 0,        // Number of tile rows
         tileWidth: 40,  // Visual width of a tile
         tileHeight: 40, // Visual height of a tile
         tiles: [],      // The two-dimensional tile array
@@ -112,6 +112,24 @@ window.onload = function () {
                 if (isDimensionValid(this.value)) {
                     $('#dimension-input').attr('disabled', 'true');
                     $('#dimension-text').css('color', 'black');
+
+                    level.rows = this.value;
+                    level.columns = this.value;
+
+                    // Initialize the two-dimensional tile array
+                    for (var i = 0; i < level.columns; i++) {
+                        level.tiles[i] = [];
+                        for (var j = 0; j < level.rows; j++) {
+                            // Define a tile type and a shift parameter for animation
+                            level.tiles[i][j] = {type: 0, shift: 0}
+                        }
+                    }
+
+                    newGame();
+                    // Enter main loop
+                    main(0);
+
+
                 } else {
                     $('#dimension-text').css('color', 'red');
                 }
@@ -123,11 +141,6 @@ window.onload = function () {
                 currentPlayerName = this.value;
                 $('#player-name-input').attr('disabled', 'true');
                 $('#player-name-text').html("Имя игрока: " + this.value);
-
-
-                //valid json
-                // var myJson = {"name": "test3", "scores": [{ "value": 400}]};
-                var player = {"name": currentPlayerName};
 
                 $.ajax({
                     type: "POST",
@@ -148,6 +161,23 @@ window.onload = function () {
             && n >= 5;
     }
 
+    function renderBackground() {
+// Draw background and a border
+        context.fillStyle = "#d0d0d0";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.fillStyle = "#e8eaec";
+        context.fillRect(1, 1, canvas.width - 2, canvas.height - 2);
+
+        // Draw score
+        context.fillStyle = "#000000";
+        context.font = "24px Verdana";
+        drawCenterText("Score:", 30, level.y + 40, 150);
+        drawCenterText(score, 30, level.y + 70, 150);
+
+        // Draw buttons
+        drawButtons();
+    }
+
 // Initialize the game
     function init() {
         // Add mouse events
@@ -158,20 +188,12 @@ window.onload = function () {
 
         initButtons();
 
-        // Initialize the two-dimensional tile array
-        for (var i = 0; i < level.columns; i++) {
-            level.tiles[i] = [];
-            for (var j = 0; j < level.rows; j++) {
-                // Define a tile type and a shift parameter for animation
-                level.tiles[i][j] = {type: 0, shift: 0}
-            }
-        }
 
-        // New game
-        newGame();
 
-        // Enter main loop
-        main(0);
+        renderBackground();
+
+
+
     }
 
     // Main loop
@@ -179,18 +201,17 @@ window.onload = function () {
         // Request animation frames
         window.requestAnimationFrame(main);
 
-        // Update and render the game
-        update(tFrame);
-        render();
+        // Update and renderGame the game
+            update(tFrame);
+
+            renderGame();
+
     }
 
     // Update the game state
     function update(tFrame) {
         var dt = (tFrame - lastFrame) / 1000;
         lastFrame = tFrame;
-
-        // Update the fps counter
-        updateFps(dt);
 
         if (gameState == gameStates.ready) {
             // Game is ready for player input
@@ -307,21 +328,6 @@ window.onload = function () {
         }
     }
 
-    function updateFps(dt) {
-        if (fpsTime > 0.25) {
-            // Calculate fps
-            fps = Math.round(frameCount / fpsTime);
-
-            // Reset time and frameCount
-            fpsTime = 0;
-            frameCount = 0;
-        }
-
-        // Increase time and frameCount
-        fpsTime += dt;
-        frameCount++;
-    }
-
     // Draw text that is centered
     function drawCenterText(text, x, y, width) {
         var textDim = context.measureText(text);
@@ -329,22 +335,7 @@ window.onload = function () {
     }
 
     // Render the game
-    function render() {
-        // Draw background and a border
-        context.fillStyle = "#d0d0d0";
-        context.fillRect(0, 0, canvas.width, canvas.height);
-        context.fillStyle = "#e8eaec";
-        context.fillRect(1, 1, canvas.width - 2, canvas.height - 2);
-
-        // Draw score
-        context.fillStyle = "#000000";
-        context.font = "24px Verdana";
-        drawCenterText("Score:", 30, level.y + 40, 150);
-        drawCenterText(score, 30, level.y + 70, 150);
-
-        // Draw buttons
-        drawButtons();
-
+    function renderGame() {
         // Draw level background
         var levelWidth = level.columns * level.tileWidth;
         var levelHeight = level.rows * level.tileHeight;
@@ -371,11 +362,6 @@ window.onload = function () {
             context.font = "24px Verdana";
             drawCenterText("Game Over!", level.x, level.y + levelHeight / 2 + 10, levelWidth);
         }
-    }
-
-    // Draw a frame with a border
-    function drawFrame() {
-
     }
 
     // Draw buttons

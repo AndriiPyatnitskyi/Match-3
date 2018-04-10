@@ -3,6 +3,9 @@ window.onload = function () {
     var canvas = document.getElementById("viewport");
     var context = canvas.getContext("2d");
 
+    var currentPlayerName;
+    var keyEnterCode = 13;
+
     // Timing and frames per second
     var lastFrame = 0;
     var fpsTime = 0;
@@ -66,13 +69,95 @@ window.onload = function () {
         {x: 30, y: 300, width: 150, height: 50, text: "Show Moves"},
         {x: 30, y: 360, width: 150, height: 50, text: "Enable AI Bot"}];
 
-    // Initialize the game
+    function initButtons() {
+        $(document).ready(function () {
+            $('#player-statistics-button').click(function () {
+                $('#player-statistics-data').empty();
+                if (typeof currentPlayerName != 'undefined') {
+                    $.getJSON('http://localhost:8080/player-statistics/' + currentPlayerName, {}, function (json) {
+                        $('#player-statistics-data').append('<div>Игрок: ' + currentPlayerName + '</div>');
+                        $('#player-statistics-data').append('<div>Очки:</div>');
+                        if (json.length > 0) {
+                            for (var i = 0; i < json.length; ++i) {
+                                $('#player-statistics-data').append('<div>' + json[i].value + '</div>');
+                            }
+                        } else {
+                            $('#player-statistics-data').append('<div>0</div>');
+                        }
+                    });
+                }
+            })
+        });
+
+        $(document).ready(function () {
+            $('#all-players-button').click(function () {
+                $.getJSON('http://localhost:8080/players/find-all', {}, function (json) {
+                    $('#all-players-data').empty();
+                    for (var i = 0; i < json.length; ++i) {
+                        $('#all-players-data').append('<div>Игрок: ' + json[i].name + '</div>');
+                        var scores = json[i].scores;
+                        if (scores.length > 0) {
+                            for (var j = 0; j < scores.length; ++j) {
+                                $('#all-players-data').append('<div>score: ' + scores[j].value + '</div>');
+                            }
+                        } else {
+                            $('#all-players-data').append('<div>score: 0 </div>');
+                        }
+                    }
+                });
+            })
+        });
+
+        $('#dimension-input').keydown(function (e) {
+            if (e.keyCode === keyEnterCode) {
+                if (isDimensionValid(this.value)) {
+                    $('#dimension-input').attr('disabled', 'true');
+                    $('#dimension-text').css('color', 'black');
+                } else {
+                    $('#dimension-text').css('color', 'red');
+                }
+            }
+        });
+
+        $('#player-name-input').keydown(function (e) {
+            if (e.keyCode === keyEnterCode) {
+                currentPlayerName = this.value;
+                $('#player-name-input').attr('disabled', 'true');
+                $('#player-name-text').html("Имя игрока: " + this.value);
+
+
+                //valid json
+                // var myJson = {"name": "test3", "scores": [{ "value": 400}]};
+                var player = {"name": currentPlayerName};
+
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json",
+                    url: "/players/save",
+                    data: JSON.stringify({"name": currentPlayerName}),
+                    dataType: 'json',
+                    cache: false,
+                    timeout: 600000
+                });
+            }
+        });
+    }
+
+    function isDimensionValid(n) {
+        return !isNaN(parseFloat(n))
+            && isFinite(n)
+            && n >= 5;
+    }
+
+// Initialize the game
     function init() {
         // Add mouse events
         canvas.addEventListener("mousemove", onMouseMove);
         canvas.addEventListener("mousedown", onMouseDown);
         canvas.addEventListener("mouseup", onMouseUp);
         canvas.addEventListener("mouseout", onMouseOut);
+
+        initButtons();
 
         // Initialize the two-dimensional tile array
         for (var i = 0; i < level.columns; i++) {

@@ -8,9 +8,6 @@ window.onload = function () {
 
     // Timing and frames per second
     var lastFrame = 0;
-    var fpsTime = 0;
-    var frameCount = 0;
-    var fps = 0;
 
     // Mouse dragging
     var drag = false;
@@ -168,12 +165,6 @@ window.onload = function () {
         context.fillStyle = "#e8eaec";
         context.fillRect(1, 1, canvas.width - 2, canvas.height - 2);
 
-        // Draw score
-        context.fillStyle = "#000000";
-        context.font = "24px Verdana";
-        drawCenterText("Score:", 30, level.y + 40, 150);
-        drawCenterText(score, 30, level.y + 70, 150);
-
         // Draw buttons
         drawButtons();
     }
@@ -254,9 +245,10 @@ window.onload = function () {
                     if (clusters.length > 0) {
                         // Add points to the score
                         for (var i = 0; i < clusters.length; i++) {
-                            // Add extra points for longer clusters
                             score += 100 * (clusters[i].length - 2);
-                            ;
+                            // Add extra points for longer clusters
+                            $('#score-data').empty();
+                            $('#score-data').append(score);
                         }
 
                         // Clusters found, remove them

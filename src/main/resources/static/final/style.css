@@ -30,6 +30,7 @@
     left: 200px;
     top: 25px;
 }
+
 #player-name-input{
     position: fixed;
     left: 20px;
@@ -40,6 +41,19 @@
     left: 20px;
     top: 25px;
 }
+
+#score-text{
+    position: fixed;
+    left: 20px;
+    top: 85px;
+}
+#score-data{
+    position: fixed;
+    left: 20px;
+    top: 120px;
+}
+
+
 
 #viewport{
     position: fixed;

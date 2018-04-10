@@ -246,8 +246,11 @@ window.onload = function () {
 
     // Render the game
     function render() {
-        // Draw the frame
-        drawFrame();
+        // Draw background and a border
+        context.fillStyle = "#d0d0d0";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.fillStyle = "#e8eaec";
+        context.fillRect(1, 1, canvas.width - 2, canvas.height - 2);
 
         // Draw score
         context.fillStyle = "#000000";
@@ -288,25 +291,7 @@ window.onload = function () {
 
     // Draw a frame with a border
     function drawFrame() {
-        // Draw background and a border
-        context.fillStyle = "#d0d0d0";
-        context.fillRect(0, 0, canvas.width, canvas.height);
-        context.fillStyle = "#e8eaec";
-        context.fillRect(1, 1, canvas.width - 2, canvas.height - 2);
 
-        // Draw header
-        context.fillStyle = "#303030";
-        context.fillRect(0, 0, canvas.width, 65);
-
-        // Draw title
-        context.fillStyle = "#ffffff";
-        context.font = "24px Verdana";
-        context.fillText("Match3 Example - Rembound.com", 10, 30);
-
-        // Display fps
-        context.fillStyle = "#ffffff";
-        context.font = "12px Verdana";
-        context.fillText("Fps: " + fps, 13, 50);
     }
 
     // Draw buttons

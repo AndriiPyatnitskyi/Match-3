@@ -1,0 +1,48 @@
+#player-statistics-button{
+    position: fixed;
+    left: 400px;
+    top: 20px;
+}
+#player-statistics-data{
+    position: fixed;
+    left: 400px;
+    top: 62px;
+}
+
+#all-players-button{
+    position: fixed;
+    left: 650px;
+    top: 20px;
+}
+#all-players-data{
+    position: fixed;
+    left: 650px;
+    top: 62px;
+}
+
+#dimension-input{
+    position: fixed;
+    left: 150px;
+    top: 145px;
+}
+#dimension-text{
+    position: fixed;
+    left: 150px;
+    top: 117px;
+}
+#player-name-input{
+    position: fixed;
+    left: 150px;
+    top: 89px;
+}
+#player-name-text{
+    position: fixed;
+    left: 150px;
+    top: 62px;
+}
+
+#viewport{
+    position: fixed;
+    left: 10px;
+    top: 10px;
+}

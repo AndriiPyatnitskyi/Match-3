@@ -10,8 +10,9 @@ import javax.persistence.*;
 @Table(name = "scores")
 public class Score {
     @Id
-    @GeneratedValue(generator = "scores_seq", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "scores_seq", sequenceName = "scores_seq", allocationSize = 1)
+//    @GeneratedValue(generator = "scores_seq", strategy = GenerationType.SEQUENCE)
+//    @SequenceGenerator(name = "scores_seq", sequenceName = "scores_seq", allocationSize = 1)
+    @GeneratedValue(strategy= GenerationType.AUTO)
     @Column(name = "SCORE_ID")
     private long id;
 

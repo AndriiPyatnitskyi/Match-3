@@ -70,7 +70,7 @@ window.onload = function () {
             $('#player-statistics-button').click(function () {
                 $('#player-statistics-data').empty();
                 if (typeof currentPlayerName != 'undefined') {
-                    $.getJSON('http://localhost:8080/player-statistics/' + currentPlayerName, {}, function (json) {
+                    $.getJSON('http://localhost:8080/score/player-statistics/' + currentPlayerName, {}, function (json) {
                         $('#player-statistics-data').append('<div>Игрок: ' + currentPlayerName + '</div>');
                         $('#player-statistics-data').append('<div>Очки:</div>');
                         if (json.length > 0) {
@@ -87,16 +87,20 @@ window.onload = function () {
 
         $(document).ready(function () {
             $('#all-players-button').click(function () {
-                $.getJSON('http://localhost:8080/players/find-all', {}, function (json) {
+                $.getJSON('http://localhost:8080/players/show-top-10-players/', {}, function (json) {
+                    console.log(JSON.stringify(json));
                     $('#all-players-data').empty();
                     for (var i = 0; i < json.length; ++i) {
                         $('#all-players-data').append('<div>Игрок: ' + json[i].name + '</div>');
                         var scores = json[i].scores;
-                        if (scores.length > 0) {
-                            for (var j = 0; j < scores.length; ++j) {
-                                $('#all-players-data').append('<div>score: ' + scores[j].value + '</div>');
+                        if (typeof scores != 'undefined') {
+                            if (scores.length > 0) {
+                                for (var j = 0; j < scores.length; ++j) {
+                                    $('#all-players-data').append('<div>score: ' + scores[j].value + '</div>');
+                                }
                             }
-                        } else {
+                        }
+                        else {
                             $('#all-players-data').append('<div>score: 0 </div>');
                         }
                     }
@@ -136,8 +140,9 @@ window.onload = function () {
         $('#player-name-input').keydown(function (e) {
             if (e.keyCode === keyEnterCode) {
                 currentPlayerName = this.value;
-                $('#player-name-input').attr('disabled', 'true');
+                $('#player-name-input').attr('disabled', true);
                 $('#player-name-text').html("Имя игрока: " + this.value);
+                $("#dimension-input").attr('disabled', false);
 
                 $.ajax({
                     type: "POST",
@@ -178,13 +183,7 @@ window.onload = function () {
         canvas.addEventListener("mouseout", onMouseOut);
 
         initButtons();
-
-
-
         renderBackground();
-
-
-
     }
 
     // Main loop
@@ -193,10 +192,9 @@ window.onload = function () {
         window.requestAnimationFrame(main);
 
         // Update and renderGame the game
-            update(tFrame);
+        update(tFrame);
 
-            renderGame();
-
+        renderGame();
     }
 
     // Update the game state
@@ -249,6 +247,18 @@ window.onload = function () {
                             // Add extra points for longer clusters
                             $('#score-data').empty();
                             $('#score-data').append(score);
+
+                            console.log(JSON.stringify({"name": currentPlayerName, "scores": [{"value": score}]}));
+
+                            $.ajax({
+                                type: "PUT",
+                                contentType: "application/json",
+                                url: "/players/edit",
+                                data: JSON.stringify({"name": currentPlayerName, "scores": [{"value": score}]}),
+                                dataType: 'json',
+                                cache: false,
+                                timeout: 600000
+                            });
                         }
 
                         // Clusters found, remove them

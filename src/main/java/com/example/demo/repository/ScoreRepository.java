@@ -11,5 +11,4 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface ScoreRepository extends PagingAndSortingRepository<Score, Long> {
     Page<Score> findByPlayerName(String playerName, Pageable pageable);
-
 }

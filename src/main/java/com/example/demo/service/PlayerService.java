@@ -15,4 +15,12 @@ public class PlayerService {
     public List<Player> getTop10Player() {
         return repository.getTop10Player();
     }
+
+    public Player getPlayerByName(String name) {
+        return repository.getPlayerByName(name);
+    }
+
+    public Player save(Player player) {
+        return repository.save(player);
+    }
 }

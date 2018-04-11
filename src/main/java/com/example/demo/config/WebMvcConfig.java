@@ -15,14 +15,6 @@ public class WebMvcConfig {
             public void addViewControllers(ViewControllerRegistry registry) {
                 registry.addViewController("/").setViewName(
                         "forward:/match3.html");
-                registry.addViewController("/http").setViewName(
-                        "forward:/http.html");
-                registry.addViewController("/test").setViewName(
-                        "forward:/test.html");
-                registry.addViewController("/origin").setViewName(
-                        "forward:/origin/match3.html");
-                registry.addViewController("/final").setViewName(
-                        "forward:/final/match3.html");
             }
         };
     }

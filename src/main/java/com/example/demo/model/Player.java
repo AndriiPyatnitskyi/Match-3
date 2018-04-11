@@ -15,8 +15,7 @@ import static javax.persistence.CascadeType.ALL;
 @Table(name = "players")
 public class Player {
     @Id
-    @GeneratedValue(generator = "players_seq", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "players_seq", sequenceName = "players_seq", allocationSize = 1)
+    @GeneratedValue(strategy= GenerationType.AUTO)
     @Column(name = "PLAYER_ID")
     private long id;
 
@@ -26,6 +25,8 @@ public class Player {
     @OneToMany(mappedBy = "player", cascade=CascadeType.ALL)
     @JsonManagedReference
     private Set<Score> scores = new HashSet<Score>(0);
+
+
 
     public long getId() {
         return id;

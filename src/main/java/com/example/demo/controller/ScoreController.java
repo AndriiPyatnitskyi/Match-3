@@ -18,28 +18,14 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/score")
 public class ScoreController {
-    //TODO replace me with service
     @Autowired
     ScoreService scoreService;
-    @Autowired
-    PlayerService playerService;
-
-//    @GetMapping("/find-all")
-//    public List<Score> showScores() {
-//        return (List<Score>) scoreService.findAll();
-//    }
-
 
     @GetMapping("/player-statistics/{playerName}")
     public List<Score> showPlayerStatistics(@PathVariable String playerName) {
         Page<Score> page = scoreService.findByPlayerName(playerName, PageRequest.of(0, 10, DESC, "id"));
         return page.getContent();
-    }
-
-    @GetMapping("/show-top-10-players/")
-    public List<Player> showTop10Players() {
-        return playerService.getTop10Player();
     }
 }
